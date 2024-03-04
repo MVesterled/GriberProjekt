@@ -3,7 +3,7 @@
 
 int main()
 {
-    //Make object of Pi, named piCalculator
+    //Make object of Pi, named piCalculator - STOR
     Pi piCalculator;
 
     //Make an int for repeats
