@@ -7,6 +7,7 @@ using namespace std;
 int main()
 {
    cout << "Hello pretty!" << endl;
+   cout << "Hello hund!" << endl;
    wiringPiSetupGpio();
    // Set GPIO pin 17 as output
     pinMode(17, OUTPUT);
