@@ -1,0 +1,3 @@
+/home/pi/MySQLTest/CMakeFiles/MySQLTEST.dir
+/home/pi/MySQLTest/CMakeFiles/edit_cache.dir
+/home/pi/MySQLTest/CMakeFiles/rebuild_cache.dir
