@@ -1,0 +1,3 @@
+/home/pi/Gripper/CMakeFiles/Gripper.dir
+/home/pi/Gripper/CMakeFiles/edit_cache.dir
+/home/pi/Gripper/CMakeFiles/rebuild_cache.dir
