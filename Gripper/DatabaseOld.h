@@ -6,22 +6,19 @@
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
-#include <string>
 
 
 class Database {
 public:
     Database(); // Constructor
-
-    void createDatabase(std::string databaseName);
     
-    void useDatabase(std::string database); //Uses database
+    void useDatabase(); //Uses database
 
-    void createTable(std::string tableName); //Creates table
+    void createTable(); //Creates table
 
-    void insertValues(int id, std::string table, std::string label); //Inserts values
+    void insertValues(); //Inserts values
 
-    void printTable(const std::string table); //Prints table
+    void printTable(); //Prints table
 
     void deletePointers(); //Deletes pointers
 

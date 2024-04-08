@@ -3,7 +3,6 @@
 
 // -> bruges for at indikere at vi bruger en memberfunktion i vores pointerobjekter
 
-//Constructor that makes connection to the database
 Database::Database() {
     std::cout << "Prøver at lave forbindelse..." << std::endl;
     try {
@@ -20,27 +19,11 @@ Database::Database() {
             }
 }
 
-//Function that create a database
-    void Database::createDatabase(std::string databaseName){
+    void Database::useDatabase(){
         try {
-            //std::string dropQuery = "DROP DATABASE IF EXISTS " + databaseName;
-            //statement->execute(dropQuery); // Drops database if exist already
-            std::string createQuery = "CREATE DATABASE " + databaseName;
-            statement->execute(createQuery); // Creates database with given name
-            std::cout << "Database oprettet" << std::endl; 
-        }
-            catch (sql::SQLException &e) { // Catch MySQL exceptions
-                std::cout << "# ERR: " << e.what(); // Print error message
-                std::cout << " (MySQL error code: " << e.getErrorCode(); // Print MySQL error code
-                std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl; // Print SQL state
-            }
-    }
-
-//Function that decides witch database we are using
-    void Database::useDatabase(std::string database){
-        try {
-            std::string query = "USE " + database;
-            statement->execute(query); // Set specified database as the current database
+            //statement->execute("DROP DATABASE IF EXISTS test_db"); // Drop 'test_db' database if it exists
+            //statement->execute("CREATE DATABASE test_db"); // Create 'test_db' database
+            statement->execute("USE test_db"); // Set 'test_db' as the current database
             std::cout << "Database i brug" << std::endl;
         }
             catch (sql::SQLException &e) { // Catch MySQL exceptions
@@ -50,16 +33,12 @@ Database::Database() {
             }
     }
 
-//Function that creates a table in the active database
-    void Database::createTable(std::string tableName){
+    void Database::createTable(){
         try {   
-            std::string dropQuery = "DROP TABLE IF EXISTS `" + tableName + "`"; // Drop 'tableName' table if it exists
-            statement->execute(dropQuery);
-        
-            std::string createQuery = "CREATE TABLE `" + tableName + "` (id INT, label CHAR(25))"; // Create 'tableName' table with id (INT) and label (CHAR(25))
-            statement->execute(createQuery);
-        
-        std::cout << "Table created" << std::endl;
+            //statement = connection->createStatement();
+            statement->execute("DROP TABLE IF EXISTS neeks"); // Drop 'test' table if it exists
+            statement->execute("CREATE TABLE neeks(id INT, label CHAR(25))"); // Create 'neeks' table with id (INT) and label (CHAR(25))
+            std::cout << "Tabel oprettet" << std::endl;
         }
         catch (sql::SQLException &e) { // Catch MySQL exceptions
             std::cout << "# ERR: " << e.what(); // Print error message
@@ -68,12 +47,10 @@ Database::Database() {
             }
     }
 
-//Function that inserts values into table
-    void Database::insertValues(int id, std::string table, std::string label){
+    void Database::insertValues(){
         try {   
-            std::string insertQuery = "INSERT INTO `" + table + "` (id, label) VALUES (" + std::to_string(id) + ", '" + label + "')"; // Insert values into table
-        statement->execute(insertQuery); 
-        std::cout << "Values inserted into table" << std::endl;
+            statement->execute("INSERT INTO neeks(id, label) VALUES (1, 'Lille Neek'), (2, 'Medium Neek'), (3, 'Stor neek')"); // Insert neeks into 'greb' table
+            std::cout << "Indsat værdier i tabel" << std::endl;
         }
         catch (sql::SQLException &e) { // Catch MySQL exceptions
             std::cout << "# ERR: " << e.what(); // Print error message
@@ -82,17 +59,21 @@ Database::Database() {
             }
     }
 
-//Function that prints a given table
-    void Database::printTable(const std::string table){
+    void Database::printTable(){
         try {
-            std::string selectQuery = "SELECT * FROM `" + table + "`"; //Print the contents of the table
-        result = statement->executeQuery(selectQuery);
-        std::cout << "Contents of " << table << ":" << std::endl;
-        while (result->next()) {
+            result = statement->executeQuery("SELECT * FROM neeks");
+            std::cout << "Contents of the neeks table:" << std::endl;
+            while (result->next()) {
             std::cout << "ID: " << result->getInt("id") << ", Label: " << result->getString("label") << std::endl;
-        }
-        std::cout << "Table printed" << std::endl;
-        delete result; // Release result set
+             }
+            // Print the contents of the table greb
+            result = statement->executeQuery("SELECT * FROM greb");
+            std::cout << "Contents of the greb table:" << std::endl;
+            while (result->next()) {
+            std::cout << "ID: " << result->getInt("id") << ", Label: " << result->getString("label") << std::endl;
+            }
+            std::cout << "Tabel Printet" << std::endl;
+
         }
         catch (sql::SQLException &e) { // Catch MySQL exceptions
             std::cout << "# ERR: " << e.what(); // Print error message
@@ -103,6 +84,7 @@ Database::Database() {
     }
 
     void Database::deletePointers(){
+        delete result; // Delete the result set object
         delete statement; // Delete the statement object
         delete connection; // Delete the connection object
         std::cout << "Pointers er slettet" << std::endl;
