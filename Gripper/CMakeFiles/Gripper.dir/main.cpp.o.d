@@ -234,4 +234,5 @@ CMakeFiles/Gripper.dir/main.cpp.o: /home/pi/Gripper/main.cpp \
  /usr/include/cppconn/config.h /usr/include/inttypes.h \
  /usr/include/cppconn/resultset_metadata.h \
  /usr/include/cppconn/datatype.h /usr/include/cppconn/statement.h \
- /usr/include/cppconn/resultset.h /home/pi/Gripper/Motor.h
+ /usr/include/cppconn/resultset.h /home/pi/Gripper/Motor.h \
+ /usr/local/include/wiringPi.h

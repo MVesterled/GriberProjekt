@@ -1,6 +1,6 @@
 CMakeFiles/Gripper.dir/Motor.cpp.o: /home/pi/Gripper/Motor.cpp \
  /usr/include/stdc-predef.h /home/pi/Gripper/Motor.h \
- /usr/include/c++/12/iostream \
+ /usr/local/include/wiringPi.h /usr/include/c++/12/iostream \
  /usr/include/aarch64-linux-gnu/c++/12/bits/c++config.h \
  /usr/include/aarch64-linux-gnu/c++/12/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \

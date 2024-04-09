@@ -230,6 +230,12 @@ MYSQLCONNECTORCPP_LIBRARY:FILEPATH=/usr/lib/aarch64-linux-gnu/libmysqlcppconn.so
 //Where to start looking for this component.
 MYSQLCONNECTORCPP_ROOT_DIR:PATH=
 
+//Path to a library.
+WIRINGPI_LIBRARY:FILEPATH=/usr/local/lib/libwiringPi.so
+
+//The directory containing a CMake configuration file for WiringPi.
+WiringPi_DIR:PATH=WiringPi_DIR-NOTFOUND
+
 
 ########################
 # INTERNAL cache entries

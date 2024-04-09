@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/pi/Gripper
+CXX_INCLUDES = -I/home/pi/WiringPi -I/home/pi/Gripper
 
 CXX_FLAGS =  -std=c++11
 

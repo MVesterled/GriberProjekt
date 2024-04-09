@@ -75,6 +75,15 @@ if(MYSQLCONNECTORCPP_FOUND)
 endif()
 #########################################################################################
 
+# Find WiringPi
+find_library(WIRINGPI_LIBRARY wiringPi)
+
+# Specify the path to WiringPi include directory
+set(WIRINGPI_INCLUDE_DIRS "/home/pi/WiringPi")
+
+# Set the include directory for WiringPi
+include_directories(${WIRINGPI_INCLUDE_DIRS})
+
 # Set the include directory
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -85,4 +94,4 @@ set(SOURCE_FILES main.cpp Motor.cpp Motor.h Database.cpp Database.h)
 add_executable(Gripper ${SOURCE_FILES})
 
 # Link the libraries
-target_link_libraries(Gripper ${MYSQLCONNECTORCPP_LIBRARIES})
+target_link_libraries(Gripper ${MYSQLCONNECTORCPP_LIBRARIES} ${WIRINGPI_LIBRARY})

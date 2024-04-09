@@ -125,6 +125,7 @@ Gripper: CMakeFiles/Gripper.dir/Motor.cpp.o
 Gripper: CMakeFiles/Gripper.dir/Database.cpp.o
 Gripper: CMakeFiles/Gripper.dir/build.make
 Gripper: /usr/lib/aarch64-linux-gnu/libmysqlcppconn.so
+Gripper: /usr/local/lib/libwiringPi.so
 Gripper: CMakeFiles/Gripper.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable Gripper"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Gripper.dir/link.txt --verbose=$(VERBOSE)

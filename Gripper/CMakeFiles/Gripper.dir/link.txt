@@ -1,1 +1,1 @@
-/usr/bin/c++  -std=c++11 -rdynamic CMakeFiles/Gripper.dir/main.cpp.o CMakeFiles/Gripper.dir/Motor.cpp.o CMakeFiles/Gripper.dir/Database.cpp.o -o Gripper  /usr/lib/aarch64-linux-gnu/libmysqlcppconn.so 
+/usr/bin/c++  -std=c++11 -rdynamic CMakeFiles/Gripper.dir/main.cpp.o CMakeFiles/Gripper.dir/Motor.cpp.o CMakeFiles/Gripper.dir/Database.cpp.o -o Gripper  -Wl,-rpath,/usr/local/lib /usr/lib/aarch64-linux-gnu/libmysqlcppconn.so /usr/local/lib/libwiringPi.so 

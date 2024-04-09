@@ -296,6 +296,7 @@ CMakeFiles/Gripper.dir/Database.cpp.o: Database.cpp \
 CMakeFiles/Gripper.dir/Motor.cpp.o: Motor.cpp \
   /usr/include/stdc-predef.h \
   Motor.h \
+  /usr/local/include/wiringPi.h \
   /usr/include/c++/12/iostream \
   /usr/include/aarch64-linux-gnu/c++/12/bits/c++config.h \
   /usr/include/aarch64-linux-gnu/c++/12/bits/os_defines.h \
@@ -766,7 +767,8 @@ CMakeFiles/Gripper.dir/main.cpp.o: main.cpp \
   /usr/include/cppconn/datatype.h \
   /usr/include/cppconn/statement.h \
   /usr/include/cppconn/resultset.h \
-  Motor.h
+  Motor.h \
+  /usr/local/include/wiringPi.h
 
 
 main.cpp:
@@ -1080,6 +1082,8 @@ Database.h:
 /usr/include/c++/12/bits/uniform_int_dist.h:
 
 /usr/include/c++/12/bits/ptr_traits.h:
+
+/usr/local/include/wiringPi.h:
 
 /usr/include/c++/12/bits/concept_check.h:
 
