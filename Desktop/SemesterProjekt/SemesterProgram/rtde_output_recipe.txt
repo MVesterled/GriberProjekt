@@ -1,0 +1,3 @@
+output_bit_register_127
+output_bit_register_126
+output_bit_register_125
