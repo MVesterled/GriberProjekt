@@ -85,6 +85,51 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+.PHONY : list_install_components/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
+
 # The main all target
 all: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Gripper/CMakeFiles /home/pi/Gripper//CMakeFiles/progress.marks
@@ -129,6 +174,19 @@ Gripper/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper.dir/build.make CMakeFiles/Gripper.dir/build
 .PHONY : Gripper/fast
 
+#=============================================================================
+# Target rules for targets named Gripper_autogen
+
+# Build rule for target.
+Gripper_autogen: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Gripper_autogen
+.PHONY : Gripper_autogen
+
+# fast build rule for target.
+Gripper_autogen/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper_autogen.dir/build.make CMakeFiles/Gripper_autogen.dir/build
+.PHONY : Gripper_autogen/fast
+
 Database.o: Database.cpp.o
 .PHONY : Database.o
 
@@ -152,6 +210,54 @@ Database.s: Database.cpp.s
 Database.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper.dir/build.make CMakeFiles/Gripper.dir/Database.cpp.s
 .PHONY : Database.cpp.s
+
+Encoder.o: Encoder.cpp.o
+.PHONY : Encoder.o
+
+# target to build an object file
+Encoder.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper.dir/build.make CMakeFiles/Gripper.dir/Encoder.cpp.o
+.PHONY : Encoder.cpp.o
+
+Encoder.i: Encoder.cpp.i
+.PHONY : Encoder.i
+
+# target to preprocess a source file
+Encoder.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper.dir/build.make CMakeFiles/Gripper.dir/Encoder.cpp.i
+.PHONY : Encoder.cpp.i
+
+Encoder.s: Encoder.cpp.s
+.PHONY : Encoder.s
+
+# target to generate assembly for a file
+Encoder.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper.dir/build.make CMakeFiles/Gripper.dir/Encoder.cpp.s
+.PHONY : Encoder.cpp.s
+
+Gripper_autogen/mocs_compilation.o: Gripper_autogen/mocs_compilation.cpp.o
+.PHONY : Gripper_autogen/mocs_compilation.o
+
+# target to build an object file
+Gripper_autogen/mocs_compilation.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper.dir/build.make CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.o
+.PHONY : Gripper_autogen/mocs_compilation.cpp.o
+
+Gripper_autogen/mocs_compilation.i: Gripper_autogen/mocs_compilation.cpp.i
+.PHONY : Gripper_autogen/mocs_compilation.i
+
+# target to preprocess a source file
+Gripper_autogen/mocs_compilation.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper.dir/build.make CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.i
+.PHONY : Gripper_autogen/mocs_compilation.cpp.i
+
+Gripper_autogen/mocs_compilation.s: Gripper_autogen/mocs_compilation.cpp.s
+.PHONY : Gripper_autogen/mocs_compilation.s
+
+# target to generate assembly for a file
+Gripper_autogen/mocs_compilation.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper.dir/build.make CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.s
+.PHONY : Gripper_autogen/mocs_compilation.cpp.s
 
 Motor.o: Motor.cpp.o
 .PHONY : Motor.o
@@ -208,11 +314,22 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... install"
+	@echo "... install/local"
+	@echo "... install/strip"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... Gripper_autogen"
 	@echo "... Gripper"
 	@echo "... Database.o"
 	@echo "... Database.i"
 	@echo "... Database.s"
+	@echo "... Encoder.o"
+	@echo "... Encoder.i"
+	@echo "... Encoder.s"
+	@echo "... Gripper_autogen/mocs_compilation.o"
+	@echo "... Gripper_autogen/mocs_compilation.i"
+	@echo "... Gripper_autogen/mocs_compilation.s"
 	@echo "... Motor.o"
 	@echo "... Motor.i"
 	@echo "... Motor.s"

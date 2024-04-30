@@ -1,3 +1,8 @@
 /home/pi/Gripper/CMakeFiles/Gripper.dir
 /home/pi/Gripper/CMakeFiles/edit_cache.dir
 /home/pi/Gripper/CMakeFiles/rebuild_cache.dir
+/home/pi/Gripper/CMakeFiles/list_install_components.dir
+/home/pi/Gripper/CMakeFiles/install.dir
+/home/pi/Gripper/CMakeFiles/install/local.dir
+/home/pi/Gripper/CMakeFiles/install/strip.dir
+/home/pi/Gripper/CMakeFiles/Gripper_autogen.dir

@@ -1,25 +1,21 @@
-cmake_minimum_required(VERSION 3.3)
-project(Gripper)
+cmake_minimum_required(VERSION 3.14)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+project(Gripper LANGUAGES CXX)
 
-# Ref from https://cmake.org/pipermail/cmake/2010-May/037159.html
-####################################################################################
-# - Try to find Mysql-Connector-C++
-# Once done, this will define
-#
-#  MYSQLCONNECTORCPP_FOUND - system has Mysql-Connector-C++ installed
-#  MYSQLCONNECTORCPP_INCLUDE_DIRS - the Mysql-Connector-C++ include directories
-#  MYSQLCONNECTORCPP_LIBRARIES - link these to use Mysql-Connector-C++
-#
-# The user may wish to set, in the CMake GUI or otherwise, this variable:
-#  MYSQLCONNECTORCPP_ROOT_DIR - path to start searching for the module
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(MYSQLCONNECTORCPP_ROOT_DIR
         "${MYSQLCONNECTORCPP_ROOT_DIR}"
         CACHE
         PATH
         "Where to start looking for this component.")
+
+
 
 if(WIN32)
     find_path(MYSQLCONNECTORCPP_INCLUDE_DIR
@@ -63,35 +59,62 @@ endif()
 mark_as_advanced(MYSQLCONNECTORCPP_INCLUDE_DIR MYSQLCONNECTORCPP_LIBRARY)
 
 include(FindPackageHandleStandardArgs)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
+find_package(ur_client_library REQUIRED)
 find_package_handle_standard_args(MysqlConnectorCpp
         DEFAULT_MSG
         MYSQLCONNECTORCPP_INCLUDE_DIR
         MYSQLCONNECTORCPP_LIBRARY)
 
-if(MYSQLCONNECTORCPP_FOUND)
-    set(MYSQLCONNECTORCPP_INCLUDE_DIRS "${MYSQLCONNECTORCPP_INCLUDE_DIR}") # Add any dependencies here
-    set(MYSQLCONNECTORCPP_LIBRARIES "${MYSQLCONNECTORCPP_LIBRARY}") # Add any dependencies here
-    mark_as_advanced(MYSQLCONNECTORCPP_ROOT_DIR)
-endif()
-#########################################################################################
+    if(MYSQLCONNECTORCPP_FOUND)
+        set(MYSQLCONNECTORCPP_INCLUDE_DIRS "${MYSQLCONNECTORCPP_INCLUDE_DIR}") # Add any dependencies here
+        set(MYSQLCONNECTORCPP_LIBRARIES "${MYSQLCONNECTORCPP_LIBRARY}") # Add any dependencies here
+        mark_as_advanced(MYSQLCONNECTORCPP_ROOT_DIR)
+    endif()
 
-# Find WiringPi
-find_library(WIRINGPI_LIBRARY wiringPi)
+    # Find WiringPi
+    find_library(WIRINGPI_LIBRARY wiringPi)
 
-# Specify the path to WiringPi include directory
-set(WIRINGPI_INCLUDE_DIRS "/home/pi/WiringPi")
+    # Specify the path to WiringPi include directory
+    set(WIRINGPI_INCLUDE_DIRS "/home/pi/WiringPi")
 
-# Set the include directory for WiringPi
-include_directories(${WIRINGPI_INCLUDE_DIRS})
+    # Set the include directory for WiringPi
+    include_directories(${WIRINGPI_INCLUDE_DIRS})
 
-# Set the include directory
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+    # Set the include directory
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-# Add TestClass.cpp to the sources
-set(SOURCE_FILES main.cpp Motor.cpp Motor.h Database.cpp Database.h)
-
-# Create the executable
-add_executable(Gripper ${SOURCE_FILES})
-
-# Link the libraries
+add_executable(Gripper
+  main.cpp  Motor.cpp   Motor.h Database.cpp Database.h Encoder.h   Encoder.cpp
+)
+target_link_libraries(Gripper Qt${QT_VERSION_MAJOR}::Core)
 target_link_libraries(Gripper ${MYSQLCONNECTORCPP_LIBRARIES} ${WIRINGPI_LIBRARY})
+target_link_libraries(ur_client_library::urcl)
+
+install(TARGETS Gripper
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+#hest
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

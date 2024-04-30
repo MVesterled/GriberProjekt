@@ -69,10 +69,24 @@ include CMakeFiles/Gripper.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/Gripper.dir/flags.make
 
+CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.o: CMakeFiles/Gripper.dir/flags.make
+CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.o: Gripper_autogen/mocs_compilation.cpp
+CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.o: CMakeFiles/Gripper.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.o -MF CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.o.d -o CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.o -c /home/pi/Gripper/Gripper_autogen/mocs_compilation.cpp
+
+CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pi/Gripper/Gripper_autogen/mocs_compilation.cpp > CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.i
+
+CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pi/Gripper/Gripper_autogen/mocs_compilation.cpp -o CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.s
+
 CMakeFiles/Gripper.dir/main.cpp.o: CMakeFiles/Gripper.dir/flags.make
 CMakeFiles/Gripper.dir/main.cpp.o: main.cpp
 CMakeFiles/Gripper.dir/main.cpp.o: CMakeFiles/Gripper.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Gripper.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Gripper.dir/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Gripper.dir/main.cpp.o -MF CMakeFiles/Gripper.dir/main.cpp.o.d -o CMakeFiles/Gripper.dir/main.cpp.o -c /home/pi/Gripper/main.cpp
 
 CMakeFiles/Gripper.dir/main.cpp.i: cmake_force
@@ -86,7 +100,7 @@ CMakeFiles/Gripper.dir/main.cpp.s: cmake_force
 CMakeFiles/Gripper.dir/Motor.cpp.o: CMakeFiles/Gripper.dir/flags.make
 CMakeFiles/Gripper.dir/Motor.cpp.o: Motor.cpp
 CMakeFiles/Gripper.dir/Motor.cpp.o: CMakeFiles/Gripper.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Gripper.dir/Motor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Gripper.dir/Motor.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Gripper.dir/Motor.cpp.o -MF CMakeFiles/Gripper.dir/Motor.cpp.o.d -o CMakeFiles/Gripper.dir/Motor.cpp.o -c /home/pi/Gripper/Motor.cpp
 
 CMakeFiles/Gripper.dir/Motor.cpp.i: cmake_force
@@ -100,7 +114,7 @@ CMakeFiles/Gripper.dir/Motor.cpp.s: cmake_force
 CMakeFiles/Gripper.dir/Database.cpp.o: CMakeFiles/Gripper.dir/flags.make
 CMakeFiles/Gripper.dir/Database.cpp.o: Database.cpp
 CMakeFiles/Gripper.dir/Database.cpp.o: CMakeFiles/Gripper.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Gripper.dir/Database.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Gripper.dir/Database.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Gripper.dir/Database.cpp.o -MF CMakeFiles/Gripper.dir/Database.cpp.o.d -o CMakeFiles/Gripper.dir/Database.cpp.o -c /home/pi/Gripper/Database.cpp
 
 CMakeFiles/Gripper.dir/Database.cpp.i: cmake_force
@@ -111,23 +125,42 @@ CMakeFiles/Gripper.dir/Database.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Gripper.dir/Database.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pi/Gripper/Database.cpp -o CMakeFiles/Gripper.dir/Database.cpp.s
 
+CMakeFiles/Gripper.dir/Encoder.cpp.o: CMakeFiles/Gripper.dir/flags.make
+CMakeFiles/Gripper.dir/Encoder.cpp.o: Encoder.cpp
+CMakeFiles/Gripper.dir/Encoder.cpp.o: CMakeFiles/Gripper.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Gripper.dir/Encoder.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Gripper.dir/Encoder.cpp.o -MF CMakeFiles/Gripper.dir/Encoder.cpp.o.d -o CMakeFiles/Gripper.dir/Encoder.cpp.o -c /home/pi/Gripper/Encoder.cpp
+
+CMakeFiles/Gripper.dir/Encoder.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Gripper.dir/Encoder.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pi/Gripper/Encoder.cpp > CMakeFiles/Gripper.dir/Encoder.cpp.i
+
+CMakeFiles/Gripper.dir/Encoder.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Gripper.dir/Encoder.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pi/Gripper/Encoder.cpp -o CMakeFiles/Gripper.dir/Encoder.cpp.s
+
 # Object files for target Gripper
 Gripper_OBJECTS = \
+"CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.o" \
 "CMakeFiles/Gripper.dir/main.cpp.o" \
 "CMakeFiles/Gripper.dir/Motor.cpp.o" \
-"CMakeFiles/Gripper.dir/Database.cpp.o"
+"CMakeFiles/Gripper.dir/Database.cpp.o" \
+"CMakeFiles/Gripper.dir/Encoder.cpp.o"
 
 # External object files for target Gripper
 Gripper_EXTERNAL_OBJECTS =
 
+Gripper: CMakeFiles/Gripper.dir/Gripper_autogen/mocs_compilation.cpp.o
 Gripper: CMakeFiles/Gripper.dir/main.cpp.o
 Gripper: CMakeFiles/Gripper.dir/Motor.cpp.o
 Gripper: CMakeFiles/Gripper.dir/Database.cpp.o
+Gripper: CMakeFiles/Gripper.dir/Encoder.cpp.o
 Gripper: CMakeFiles/Gripper.dir/build.make
+Gripper: /usr/lib/aarch64-linux-gnu/libQt5Core.so.5.15.8
 Gripper: /usr/lib/aarch64-linux-gnu/libmysqlcppconn.so
 Gripper: /usr/local/lib/libwiringPi.so
 Gripper: CMakeFiles/Gripper.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable Gripper"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable Gripper"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Gripper.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

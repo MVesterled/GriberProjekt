@@ -72,21 +72,22 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/Gripper.dir/clean
+clean: CMakeFiles/Gripper_autogen.dir/clean
 .PHONY : clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/Gripper.dir
 
 # All Build rule for target.
-CMakeFiles/Gripper.dir/all:
+CMakeFiles/Gripper.dir/all: CMakeFiles/Gripper_autogen.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper.dir/build.make CMakeFiles/Gripper.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper.dir/build.make CMakeFiles/Gripper.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=1,2,3,4 "Built target Gripper"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target Gripper"
 .PHONY : CMakeFiles/Gripper.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Gripper.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Gripper/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Gripper/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Gripper.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Gripper/CMakeFiles 0
 .PHONY : CMakeFiles/Gripper.dir/rule
@@ -99,6 +100,32 @@ Gripper: CMakeFiles/Gripper.dir/rule
 CMakeFiles/Gripper.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper.dir/build.make CMakeFiles/Gripper.dir/clean
 .PHONY : CMakeFiles/Gripper.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/Gripper_autogen.dir
+
+# All Build rule for target.
+CMakeFiles/Gripper_autogen.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper_autogen.dir/build.make CMakeFiles/Gripper_autogen.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper_autogen.dir/build.make CMakeFiles/Gripper_autogen.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pi/Gripper/CMakeFiles --progress-num=7 "Built target Gripper_autogen"
+.PHONY : CMakeFiles/Gripper_autogen.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/Gripper_autogen.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Gripper/CMakeFiles 1
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Gripper_autogen.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Gripper/CMakeFiles 0
+.PHONY : CMakeFiles/Gripper_autogen.dir/rule
+
+# Convenience name for target.
+Gripper_autogen: CMakeFiles/Gripper_autogen.dir/rule
+.PHONY : Gripper_autogen
+
+# clean rule for target.
+CMakeFiles/Gripper_autogen.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Gripper_autogen.dir/build.make CMakeFiles/Gripper_autogen.dir/clean
+.PHONY : CMakeFiles/Gripper_autogen.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
