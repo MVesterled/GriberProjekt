@@ -100,6 +100,7 @@ endif()
 
 # Find WiringPi
 find_library(WIRINGPI_LIBRARY wiringPi)
+find_library(WIRINGPISPI_LIBRARY wiringPiSPI)
 
 # Specify the path to WiringPi include directory
 set(WIRINGPI_INCLUDE_DIRS "/home/pi/WiringPi")
@@ -108,7 +109,7 @@ set(WIRINGPI_INCLUDE_DIRS "/home/pi/WiringPi")
 include_directories(${WIRINGPI_INCLUDE_DIRS})
 
 add_executable(GripperRobot
-  main.cpp motor.h motor.cpp database.h database.cpp
+  main.cpp motor.h motor.cpp database.h database.cpp Encoder.h   Encoder.cpp
 
 )
 target_link_libraries(GripperRobot Qt${QT_VERSION_MAJOR}::Core ${WIRINGPI_LIBRARY} ${MYSQLCONNECTORCPP_LIBRARIES})

@@ -1,13 +1,14 @@
-//#include <stdlib.h>
 #include <iostream>
 #include <string>
 #include <database.h>
 #include <motor.h>
-//#include <QCoreApplication>
 #include <memory>
 #include <ctime>
 #include <thread>
 #include <ur_client_library/rtde/rtde_client.h>
+#include <Encoder.h>
+
+#include <wiringPiSPI.h>
 using namespace urcl;
 
 // In a real-world example it would be better to get those values from command line parameters / a better configuration
@@ -24,28 +25,26 @@ const std::chrono::milliseconds READ_TIMEOUT{ 1000 };
 
 int main(int argc, char* argv[])
 {
-
+    std::cout << "Test" << std::endl;
     wiringPiSetupGpio(); //initializer for gpio
     Motor m;
     m.setSpeed(512);
     m.setDirection(1);
-    /*
     m.startMotor();
-    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-    m.stopMotor();
-*/
 
 
 
-
-  // Parse the ip arguments if given
-  //std::string robot_ip = DEFAULT_ROBOT_IP;
+/*
+    Encoder enc;
+    while (true) {
+        enc.updateCounter();
+        std::cout << "Position: " << enc.getOrientation() << std::endl;
+    }
 
   // dette skal gøres til member variabler
-  /*
-  RobComm* rcomm = RobComm::getInstance();
-  rcomm->setClientIP()
-   */
+  //RobComm* rcomm = RobComm::getInstance();
+  //rcomm->setClientIP()
+
   comm::INotifier notifier;
   rtde_interface::RTDEClient my_client(DEFAULT_ROBOT_IP, notifier, OUTPUT_RECIPE, INPUT_RECIPE);
   my_client.init();
@@ -108,9 +107,6 @@ int main(int argc, char* argv[])
 
     if (RobotInPickPos127) {
         m.startMotor();
-        //std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-        //m.stopMotor();
-
         my_client.getWriter().sendInputBitRegister(125, 1);
     }
     else
@@ -128,6 +124,6 @@ int main(int argc, char* argv[])
     std::this_thread::sleep_for(std::chrono::milliseconds(300));
 
    }
-
+    */
   return 0;
 }
