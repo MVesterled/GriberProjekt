@@ -16,7 +16,7 @@ private:
     volatile int counter;
     volatile int lastCLKState;
 	volatile int lastDTState;
-    int CLK_PIN = 27; //pin not final
+    int CLK_PIN = 23; //pin not final
     int DT_PIN = 17; //pin not final
 };
 

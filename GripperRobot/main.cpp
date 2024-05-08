@@ -56,11 +56,12 @@ int main(int argc, char* argv[])
   //RobComm* rcomm = RobComm::getInstance();
   //rcomm->setClientIP()
 
+  wiringPiSetupGpio(); //initializer for gpio
+
   comm::INotifier notifier;
   rtde_interface::RTDEClient my_client(DEFAULT_ROBOT_IP, notifier, OUTPUT_RECIPE, INPUT_RECIPE);
   Encoder enc;
 
-  wiringPiSetupGpio(); //initializer for gpio
   Motor m;
 
   my_client.init();
@@ -68,107 +69,121 @@ int main(int argc, char* argv[])
   my_client.start();
 
 
+
   static bool RobotInPickPos127 = 0;
   static bool RobotInPlacePos126 = 0;
   static bool RobotReady125 = 0;
   static int spi_fd;
-  static bool falg1, flag2, flag3;
+  static float adc_1;
 
-  while (true)
-  {
-    // Read latest RTDE package. This will block for READ_TIMEOUT, so the
-    // robot will effectively be in charge of setting the frequency of this loop unless RTDE
-    // communication doesn't work  in which case the user will be notified.
-    // In a real-world application this thread should be scheduled with real-time priority in order
-    // to ensure that this is called in time.
-      std::unique_ptr<rtde_interface::DataPackage> data_pkg = my_client.getDataPackage(READ_TIMEOUT);
-      if (data_pkg)
+if ((spi_fd = wiringPiSPISetup(CHANNEL, 1200000)) < 0)
+{
+      std::cerr << "Failed to initialize SPI." << std::endl;
+      return 1;
+}
+
+auto dataFunction = [&](){
+    while (true)
       {
-        std::cout << data_pkg->toString() << std::endl;
+          std::unique_ptr<rtde_interface::DataPackage> data_pkg = my_client.getDataPackage(READ_TIMEOUT);
+          if (data_pkg)
+          {
+            std::cout << data_pkg->toString() << std::endl;
 
-        std::string MainData = data_pkg->toString();
+            std::string MainData = data_pkg->toString();
 
-        data_pkg->getData("output_bit_register_127", RobotInPickPos127);
-        data_pkg->getData("output_bit_register_126", RobotInPlacePos126);
-        data_pkg->getData("output_bit_register_125", RobotReady125);
+            data_pkg->getData("output_bit_register_127", RobotInPickPos127);
+            data_pkg->getData("output_bit_register_126", RobotInPlacePos126);
+            data_pkg->getData("output_bit_register_125", RobotReady125);
 
-        std::cout << "RobInPickPos127: " << RobotInPickPos127 << std::endl;
-        std::cout << "RobInPickPos126: " << RobotInPlacePos126 << std::endl;
-        std::cout << "RobotReady125: " << RobotReady125 << std::endl;
-        enc.updateCounter();
-        std::cout << "Position: " << enc.getOrientation() << std::endl;
-     }
+            std::cout << "RobInPickPos127: " << RobotInPickPos127 << std::endl;
+            std::cout << "RobInPickPos126: " << RobotInPlacePos126 << std::endl;
+            std::cout << "RobotReady125: " << RobotReady125 << std::endl;
 
-      else
-      {
-        std::cout << "Could not get fresh data package from robot" << std::endl;
-        return 1;
-      }
+            enc.updateCounter();
+            std::cout << "Position: " << enc.getOrientation() << std::endl;
+         }
 
-      if ((spi_fd = wiringPiSPISetup(CHANNEL, 1200000)) < 0) {
-          std::cerr << "Failed to initialize SPI." << std::endl;
-          return 1;
-      }
+          else
+          {
+            std::cout << "Could not get fresh data package from robot" << std::endl;
+            return 1;
+          }
 
       try {
 
-              float adc_0 = get_adc(0);
               float adc_1 = get_adc(1);
               std::cout << "V ADC Channel 1: " << adc_1 << "V" << std::endl;
 
-      } catch (...) {
+      } catch (...)
+        {
           // Catch all exceptions to ensure cleanup
           std::cerr << "An error occurred." << std::endl;
-      }
-
-  /*
-    if (!my_client.getWriter().sendInputBitRegister(127, 1))
-    {
-      // This will happen for example, when the required keys are not configured inside the input
-      // recipe.
-      std::cout << "\033[1;31mSending RTDE data failed."
-                << "\033[0m\n"
-                << std::endl;
-      return 1;
+        }
     }
-*/
-    if (RobotReady125)
-       my_client.getWriter().sendInputBitRegister(127, 1);
-    else
-       my_client.getWriter().sendInputBitRegister(127, 0);
+};
 
 
-//If robot in pick pos, run motor for gripper close
-    if (RobotInPickPos127) {
-        //Kør mod luk!
-        m.setSpeed(175);
-        m.setDirection(1);
-        delay(1000);
-        m.startMotor();
-        delay(800);
-        m.stopMotor();
-        delay(2000);
-        my_client.getWriter().sendInputBitRegister(125, 1);
+
+std::jthread dataThread(dataFunction);
+
+int RP = 0;
+
+while(true){
+    // switch case
+    switch (RP) {
+    case 0:
+        // if robot ready, send start command (true)
+        if (RobotReady125) {
+            my_client.getWriter().sendInputBitRegister(127, 1);
+            RP = 1;
+            break;
+        }
+        else
+            my_client.getWriter().sendInputBitRegister(127, 0);
+
+        break;
+    case 1:
+        //If robot in pick pos, run motor for gripper close
+        if (RobotInPickPos127)
+        {
+            //Kør mod luk!
+            m.setSpeed(400);
+            m.setDirection(0);
+            delay(1000);
+            m.startMotor();
+            delay(2000);
+            m.stopMotor();
+            delay(1000);
+            my_client.getWriter().sendInputBitRegister(125, 1);
+            RP = 2;
+            break;
+        }
+        else
+            my_client.getWriter().sendInputBitRegister(125, 0);
+
+        break;
+    case 2:
+        // if robot in place pos, run motor for gripper open
+        if (RobotInPlacePos126)
+        {
+            //Kør mod åben!
+            m.setSpeed(400);
+            m.setDirection(1);
+            delay(1000);
+            m.startMotor();
+            delay(2000);
+            m.stopMotor();
+            delay(1000);
+            my_client.getWriter().sendInputBitRegister(126, 1);
+            RP = 0;
+            break;
+        }
+        else
+            my_client.getWriter().sendInputBitRegister(126, 0);
+
+        break;
     }
-    else
-       my_client.getWriter().sendInputBitRegister(125, 0);
-
-
-
-    if (RobotInPlacePos126) {
-       //Kør mod åben!
-       m.setSpeed(175);
-       m.setDirection(0);
-       delay(1000);
-       m.startMotor();
-       delay(800);
-       m.stopMotor();
-       delay(2000);
-       my_client.getWriter().sendInputBitRegister(126, 1);
-    }
-    else
-       my_client.getWriter().sendInputBitRegister(126, 0);
-
-   }
+}
   return 0;
 }
