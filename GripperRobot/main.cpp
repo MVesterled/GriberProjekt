@@ -75,6 +75,7 @@ int main(int argc, char* argv[])
   static bool RobotReady125 = 0;
   static int spi_fd;
   static float adc_1;
+  static bool flag = false;
 
 if ((spi_fd = wiringPiSPISetup(CHANNEL, 1200000)) < 0)
 {
@@ -82,57 +83,111 @@ if ((spi_fd = wiringPiSPISetup(CHANNEL, 1200000)) < 0)
       return 1;
 }
 
-auto dataFunction = [&](){
+auto getRobotRTDE = [&](){
     while (true)
+    {
+      std::unique_ptr<rtde_interface::DataPackage> data_pkg = my_client.getDataPackage(READ_TIMEOUT);
+      if (data_pkg)
       {
-          std::unique_ptr<rtde_interface::DataPackage> data_pkg = my_client.getDataPackage(READ_TIMEOUT);
-          if (data_pkg)
-          {
-            std::cout << data_pkg->toString() << std::endl;
+        //std::cout << data_pkg->toString() << std::endl;
 
-            std::string MainData = data_pkg->toString();
+        data_pkg->getData("output_bit_register_127", RobotInPickPos127);
+        data_pkg->getData("output_bit_register_126", RobotInPlacePos126);
+        data_pkg->getData("output_bit_register_125", RobotReady125);
+/*
+        std::cout << "RobInPickPos127: " << RobotInPickPos127 << std::endl;
+        std::cout << "RobInPickPos126: " << RobotInPlacePos126 << std::endl;
+        std::cout << "RobotReady125: " << RobotReady125 << std::endl;
+        */
+      }
 
-            data_pkg->getData("output_bit_register_127", RobotInPickPos127);
-            data_pkg->getData("output_bit_register_126", RobotInPlacePos126);
-            data_pkg->getData("output_bit_register_125", RobotReady125);
+      else
+      {
+        std::cout << "Could not get fresh data package from robot" << std::endl;
+        return 1;
+      }
+    }
+};
 
-            std::cout << "RobInPickPos127: " << RobotInPickPos127 << std::endl;
-            std::cout << "RobInPickPos126: " << RobotInPlacePos126 << std::endl;
-            std::cout << "RobotReady125: " << RobotReady125 << std::endl;
-
-            enc.updateCounter();
-            std::cout << "Position: " << enc.getOrientation() << std::endl;
-         }
-
-          else
-          {
-            std::cout << "Could not get fresh data package from robot" << std::endl;
-            return 1;
-          }
-
-      try {
-
-              float adc_1 = get_adc(1);
-              std::cout << "V ADC Channel 1: " << adc_1 << "V" << std::endl;
-
-      } catch (...)
-        {
-          // Catch all exceptions to ensure cleanup
-          std::cerr << "An error occurred." << std::endl;
+auto getVoltage = [&](){
+    while(true){
+        try {
+            adc_1 = get_adc(1);
+            std::cout << "Spænding over modstand på kanal 1: " << adc_1 << " VDC" << std::endl;
+            usleep(25000);
+        } catch (...) {
+        // Catch all exceptions to ensure cleanup
+        std::cerr << "An error occurred." << std::endl;
         }
     }
 };
 
+auto getEncoder = [&](){
+    while(true){
+        enc.updateCounter();
+        //std::cout << "Position: " << enc.getOrientation() << std::endl;
+    }
+};
 
+std::jthread dataThread1(getRobotRTDE);
+std::jthread dataThread2(getVoltage);
+std::jthread dataThread3(getEncoder);
 
-std::jthread dataThread(dataFunction);
-
-int RP = 0;
+int RP = 1;
 
 while(true){
     // switch case
     switch (RP) {
-    case 0:
+
+    case 1:
+        //zero robot at center
+        m.setSpeed(200);
+        m.setDirection(0);
+        delay(100);
+        m.startMotor();
+        delay(1000);
+        m.stopMotor();
+        delay(1000);
+        m.setDirection(1);
+        delay(100);
+        m.startMotor();
+        delay(600);
+        while(true){
+            if(adc_1 > 4.6)
+            {
+                std::cout << "Center nået, nulstil encoder!" << std::endl;
+                m.stopMotor();
+                enc.setOrientation(0);
+                RP = 9;
+                break;
+            }
+        }
+
+        break;
+    case 9:
+        //Move robot to full open
+        m.setSpeed(200);
+        m.setDirection(0);
+        delay(1000);
+        m.startMotor();
+        std::cout << "Køre mod endestop!" << std::endl;
+        while(true){
+            if(enc.getOrientation() <= -18){
+                std::cout << "Nået endestop!" << std::endl;
+                m.stopMotor();
+                delay(1);
+                m.setSpeed(0);
+                delay(1);
+                m.startMotor();
+                delay(100);
+                m.stopMotor();
+                RP = 10;
+                break;
+            }
+        }
+        break;
+
+    case 10:
         // if robot ready, send start command (true)
         if (RobotReady125) {
             my_client.getWriter().sendInputBitRegister(127, 1);
@@ -143,41 +198,74 @@ while(true){
             my_client.getWriter().sendInputBitRegister(127, 0);
 
         break;
-    case 1:
-        //If robot in pick pos, run motor for gripper close
+    case 15:
+        //If robot in pick pos, run motor for gripper close with ADC
         if (RobotInPickPos127)
         {
             //Kør mod luk!
-            m.setSpeed(400);
-            m.setDirection(0);
-            delay(1000);
+            m.setSpeed(200);
+            m.setDirection(1);
+            delay(500);
+            std::cout << "Start motor luk!" << std::endl;
             m.startMotor();
-            delay(2000);
-            m.stopMotor();
+            delay(600);
+
+            while(true){
+                if(adc_1 > 4.6) // kør indtil måling er høj
+                {
+                    flag = true;
+                    std::cout << "Lukke strøm opnået, stopper motor!!!" << std::endl;
+                    m.stopMotor();
+                    delay(1);
+                    m.setSpeed(50);
+                    delay(1);
+                    m.startMotor(); // start moment og hold mens robot bevæger sig
+                    /*
+                    delay(30000);
+                    std::cout << "Slipper!" << std::endl;
+                    m.stopMotor();
+                    */
+
+                    RP = 20;
+                    break;
+                }
+            }
             delay(1000);
             my_client.getWriter().sendInputBitRegister(125, 1);
-            RP = 2;
             break;
         }
         else
             my_client.getWriter().sendInputBitRegister(125, 0);
 
         break;
-    case 2:
+    case 20:
         // if robot in place pos, run motor for gripper open
         if (RobotInPlacePos126)
         {
+
+            m.stopMotor(); // stop moment, når robot er i position
+            delay(100);
+
             //Kør mod åben!
-            m.setSpeed(400);
+            m.setSpeed(200);
             m.setDirection(1);
-            delay(1000);
+            delay(100);
             m.startMotor();
-            delay(2000);
-            m.stopMotor();
-            delay(1000);
+            while(true){
+                if(enc.getOrientation() <= -22){
+                    m.stopMotor();
+                    delay(1);
+                    m.setSpeed(0);
+                    delay(1);
+                    m.startMotor();
+                    delay(100);
+                    m.stopMotor();
+                    RP = 10;
+                    break;
+                }
+            }
+
             my_client.getWriter().sendInputBitRegister(126, 1);
-            RP = 0;
-            break;
         }
         else
             my_client.getWriter().sendInputBitRegister(126, 0);
