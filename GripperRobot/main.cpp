@@ -63,11 +63,10 @@ int main(int argc, char* argv[])
   Encoder enc;
 
   Motor m;
-
+/*
   my_client.init();
-
   my_client.start();
-
+*/
 
 
   static bool RobotInPickPos127 = 0;
@@ -76,6 +75,7 @@ int main(int argc, char* argv[])
   static int spi_fd;
   static float adc_1;
   static bool flag = false;
+  static int tempEnc = 0;
 
 if ((spi_fd = wiringPiSPISetup(CHANNEL, 1200000)) < 0)
 {
@@ -114,7 +114,7 @@ auto getVoltage = [&](){
         try {
             adc_1 = get_adc(1);
             std::cout << "Spænding over modstand på kanal 1: " << adc_1 << " VDC" << std::endl;
-            usleep(25000);
+            usleep(50000);
         } catch (...) {
         // Catch all exceptions to ensure cleanup
         std::cerr << "An error occurred." << std::endl;
@@ -124,12 +124,14 @@ auto getVoltage = [&](){
 
 auto getEncoder = [&](){
     while(true){
+        tempEnc = enc.getOrientation();
         enc.updateCounter();
-        //std::cout << "Position: " << enc.getOrientation() << std::endl;
+        if(enc.getOrientation() != tempEnc)
+            std::cout << "Position: " << enc.getOrientation() << std::endl;
     }
 };
 
-std::jthread dataThread1(getRobotRTDE);
+//std::jthread dataThread1(getRobotRTDE);
 std::jthread dataThread2(getVoltage);
 std::jthread dataThread3(getEncoder);
 
@@ -145,7 +147,7 @@ while(true){
         m.setDirection(0);
         delay(100);
         m.startMotor();
-        delay(1000);
+        delay(500);
         m.stopMotor();
         delay(1000);
         m.setDirection(1);
@@ -157,8 +159,17 @@ while(true){
             {
                 std::cout << "Center nået, nulstil encoder!" << std::endl;
                 m.stopMotor();
+                delay(500);
+                m.setSpeed(50);
+                m.setDirection(0);
+                delay(100);
+                m.startMotor();
+                delay(300);
+                m.stopMotor();
+                delay(100);
                 enc.setOrientation(0);
                 RP = 9;
+                std::cout << enc.getOrientation() << std::endl;
                 break;
             }
         }
@@ -172,16 +183,17 @@ while(true){
         m.startMotor();
         std::cout << "Køre mod endestop!" << std::endl;
         while(true){
-            if(enc.getOrientation() <= -18){
+            if(enc.getOrientation() <= -15){
                 std::cout << "Nået endestop!" << std::endl;
                 m.stopMotor();
                 delay(1);
-                m.setSpeed(0);
-                delay(1);
+                m.setSpeed(100);
+                m.setDirection(1);
+                delay(10);
                 m.startMotor();
                 delay(100);
                 m.stopMotor();
-                RP = 10;
+                RP = 15;
                 break;
             }
         }
@@ -200,7 +212,7 @@ while(true){
         break;
     case 15:
         //If robot in pick pos, run motor for gripper close with ADC
-        if (RobotInPickPos127)
+        if (RobotInPickPos127 && true)
         {
             //Kør mod luk!
             m.setSpeed(200);
@@ -220,11 +232,11 @@ while(true){
                     m.setSpeed(50);
                     delay(1);
                     m.startMotor(); // start moment og hold mens robot bevæger sig
-                    /*
-                    delay(30000);
+                    std::cout << "Størrelsen på denne kasse er: " << enc.getOrientation() << std::endl;
+
+                    delay(5000);
                     std::cout << "Slipper!" << std::endl;
                     m.stopMotor();
-                    */
 
                     RP = 20;
                     break;

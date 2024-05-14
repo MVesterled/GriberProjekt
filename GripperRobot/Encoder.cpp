@@ -32,6 +32,6 @@ void Encoder::updateCounter(){
 		}
 	}
   lastCLKState = CLKState;
-  delay(2);
+  delay(5);
 }
 
