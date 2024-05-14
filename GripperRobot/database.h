@@ -17,13 +17,19 @@ public:
 
     void useDatabase(std::string database); //Uses database
 
-    void createTable(std::string tableName); //Creates table
+    void createTableGreb(std::string tableName); //Creates table
 
-    void insertValues(int id, std::string table, std::string label); //Inserts values
+    void insertValuesGreb(std::string table, std::string label); //Inserts values
 
-    void printTable(const std::string table); //Prints table
+    void printTableGreb(const std::string table); //Prints table
 
     void deletePointers(); //Deletes pointers
+
+    void createTablePose(std::string tableName); //Creates table
+
+    void insertValuesPose(std::string table, double j1, double j2, double j3, double j4, double j5, double j6); //Inserts values
+
+    void printTablePose(const std::string table); //Prints table
 
 private:
 //Creates objects

@@ -1,0 +1,4 @@
+input_bit_register_127
+input_bit_register_126
+input_bit_register_125
+input_int_register_47
