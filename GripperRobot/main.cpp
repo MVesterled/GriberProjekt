@@ -7,6 +7,7 @@
 #include <thread>
 #include <ur_client_library/rtde/rtde_client.h>
 #include <Encoder.h>
+#include "AmMeter.h"
 
 #include <wiringPiSPI.h>
 using namespace urcl;
@@ -23,33 +24,6 @@ const std::chrono::milliseconds READ_TIMEOUT{ 1000 };
 // Static member for RobComm
 //RobComm*  RobComm::mRComm = nullptr;
 
-void closeHandler(int sig) {
-    exit(0);
-}
-
-float get_adc(int channel) {
-    if (channel != 0) {
-        channel = 1;
-    }
-
-    std::vector<unsigned char> data(2);
-    data[0] = 0b11;
-    data[0] = ((data[0] << 1) + channel) << 5;
-    data[1] = 0b00000000;
-
-    wiringPiSPIDataRW(CHANNEL, data.data(), data.size());
-
-    unsigned int adc = 0;
-    for (int i = 0; i < 2; ++i) {
-        adc = (adc << 8) + data[i];
-    }
-    adc = adc >> 1;
-
-    float voltage = (5 * adc) / 1024.0;
-
-    return voltage;
-}
-
 int main(int argc, char* argv[])
 {
   // dette skal gøres til member variabler
@@ -63,6 +37,7 @@ int main(int argc, char* argv[])
   Encoder enc;
 
   Motor m;
+  AmMeter AM;
 /*
   my_client.init();
   my_client.start();
@@ -72,16 +47,11 @@ int main(int argc, char* argv[])
   static bool RobotInPickPos127 = 0;
   static bool RobotInPlacePos126 = 0;
   static bool RobotReady125 = 0;
-  static int spi_fd;
   static float adc_1;
   static bool flag = false;
   static int tempEnc = 0;
 
-if ((spi_fd = wiringPiSPISetup(CHANNEL, 1200000)) < 0)
-{
-      std::cerr << "Failed to initialize SPI." << std::endl;
-      return 1;
-}
+
 
 auto getRobotRTDE = [&](){
     while (true)
@@ -112,7 +82,7 @@ auto getRobotRTDE = [&](){
 auto getVoltage = [&](){
     while(true){
         try {
-            adc_1 = get_adc(1);
+            adc_1 = AM.getADC(1);
             std::cout << "Spænding over modstand på kanal 1: " << adc_1 << " VDC" << std::endl;
             usleep(50000);
         } catch (...) {
@@ -183,7 +153,7 @@ while(true){
         m.startMotor();
         std::cout << "Køre mod endestop!" << std::endl;
         while(true){
-            if(enc.getOrientation() <= -15){
+            if(enc.getOrientation() <= -17){
                 std::cout << "Nået endestop!" << std::endl;
                 m.stopMotor();
                 delay(1);
@@ -212,7 +182,7 @@ while(true){
         break;
     case 15:
         //If robot in pick pos, run motor for gripper close with ADC
-        if (RobotInPickPos127 && true)
+        if (RobotInPickPos127 || true)
         {
             //Kør mod luk!
             m.setSpeed(200);
@@ -232,6 +202,7 @@ while(true){
                     m.setSpeed(50);
                     delay(1);
                     m.startMotor(); // start moment og hold mens robot bevæger sig
+                    delay(100);
                     std::cout << "Størrelsen på denne kasse er: " << enc.getOrientation() << std::endl;
 
                     delay(5000);
