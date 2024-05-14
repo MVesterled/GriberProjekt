@@ -35,9 +35,14 @@ int main(int argc, char* argv[])
   comm::INotifier notifier;
   rtde_interface::RTDEClient my_client(DEFAULT_ROBOT_IP, notifier, OUTPUT_RECIPE, INPUT_RECIPE);
   Encoder enc;
-
   Motor m;
   AmMeter AM;
+  Database DB;
+  DB.createDatabase("GriberData");
+  DB.useDatabase("GriberData");
+  DB.createTable("Greb");
+
+
 /*
   my_client.init();
   my_client.start();
@@ -81,13 +86,15 @@ auto getRobotRTDE = [&](){
 
 auto getVoltage = [&](){
     while(true){
-        try {
-            adc_1 = AM.getADC(1);
-            std::cout << "Spænding over modstand på kanal 1: " << adc_1 << " VDC" << std::endl;
-            usleep(50000);
-        } catch (...) {
-        // Catch all exceptions to ensure cleanup
-        std::cerr << "An error occurred." << std::endl;
+        if(!flag){
+            try {
+                adc_1 = AM.getADC(1);
+                std::cout << "Spænding over modstand på kanal 1: " << adc_1 << " VDC" << std::endl;
+                usleep(50000);
+            } catch (...) {
+            // Catch all exceptions to ensure cleanup
+            std::cerr << "An error occurred." << std::endl;
+            }
         }
     }
 };
@@ -153,7 +160,7 @@ while(true){
         m.startMotor();
         std::cout << "Køre mod endestop!" << std::endl;
         while(true){
-            if(enc.getOrientation() <= -17){
+            if(enc.getOrientation() >= 19){
                 std::cout << "Nået endestop!" << std::endl;
                 m.stopMotor();
                 delay(1);
@@ -205,6 +212,29 @@ while(true){
                     delay(100);
                     std::cout << "Størrelsen på denne kasse er: " << enc.getOrientation() << std::endl;
 
+                    //If statment der holder styr på kassen der lige er blevet grebet. Kasse bliver indsat i databasen alt efter størrelse
+                    if(enc.getOrientation() >= 6 && enc.getOrientation() <= 9){
+
+                        DB.insertValues(1, "Greb", "Lille kasse med størrelsen: " + std::to_string(enc.getOrientation()));
+
+                    }
+                    else if(enc.getOrientation() >= 11 && enc.getOrientation() <= 13){
+
+                        DB.insertValues(2, "Greb", "Mellem kasse med størrelsen: " + std::to_string(enc.getOrientation()));
+
+                    }
+                    else if(enc.getOrientation() >= 15 && enc.getOrientation() <= 18){
+
+                        DB.insertValues(3, "Greb", "Stor kasse med størrelsen: " + std::to_string(enc.getOrientation()));
+
+                    }
+                    else{
+
+                        DB.insertValues(10, "Greb", "Udefineret kasse!");
+
+                    }
+                    DB.printTable("Greb");
+                    flag = true;
                     delay(5000);
                     std::cout << "Slipper!" << std::endl;
                     m.stopMotor();

@@ -53,10 +53,10 @@ Database::Database() {
 //Function that creates a table in the active database
     void Database::createTable(std::string tableName){
         try {
-            std::string dropQuery = "DROP TABLE IF EXISTS `" + tableName + "`"; // Drop 'tableName' table if it exists
-            statement->execute(dropQuery);
+            //std::string dropQuery = "DROP TABLE IF EXISTS `" + tableName + "`"; // Drop 'tableName' table if it exists
+            //statement->execute(dropQuery);
 
-            std::string createQuery = "CREATE TABLE `" + tableName + "` (id INT, label CHAR(25))"; // Create 'tableName' table with id (INT) and label (CHAR(25))
+            std::string createQuery = "CREATE TABLE `" + tableName + "` (id INT, label CHAR(250))"; // Create 'tableName' table with id (INT) and label (CHAR(25))
             statement->execute(createQuery);
 
         std::cout << "Table created" << std::endl;

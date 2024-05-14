@@ -25,9 +25,9 @@ void Encoder::updateCounter(){
 	if (lastCLKState != CLKState) {
 		if (CLKState == HIGH) {
 			if (DTState == LOW) {
-			counter++;
+            counter--;
 			} else {
-			counter--;
+            counter++;
 			}
 		}
 	}
