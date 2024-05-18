@@ -22,7 +22,7 @@ const std::chrono::milliseconds READ_TIMEOUT{ 1000 };
 int main()
 {
 
-  wiringPiSetupGpio(); //initializer for gpio
+  wiringPiSetupGpio(); //initializer for gpio.
 
   comm::INotifier notifier;
   rtde_interface::RTDEClient my_client(DEFAULT_ROBOT_IP, notifier, OUTPUT_RECIPE, INPUT_RECIPE);
